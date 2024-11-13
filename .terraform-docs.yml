@@ -1,0 +1,13 @@
+formatter: "markdown table"
+
+header-from: "docs/.header.md"
+
+output:
+  file: "README.md"
+
+settings:
+  hide-empty: true
+
+sort:
+  enabled: true
+  by: required
