@@ -45,7 +45,3 @@ resource "aws_cloudwatch_log_group" "api_gw_log_group" {
   name              = "/aws/api-gateway/${aws_apigatewayv2_api.apg.name}"
   retention_in_days = var.api_gateway.log_retention
 }
-
-output "api_gateway_url" {
-  value = aws_apigatewayv2_api.apg.api_endpoint
-}

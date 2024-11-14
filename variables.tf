@@ -74,8 +74,11 @@ variable "functions" {
     sqs           = optional(bool, false)
     cron          = optional(string)
     description   = optional(string)
-    sqs_listeners = optional(list(string))
+    environment   = optional(map(string), {})
+    sqs_listeners = optional(list(string), [])
     log_retention = optional(number, 3)
+    assume_roles  = optional(list(string), [])
+    policies      = optional(map(string), {})
   }))
   description = <<EOT
   functions = {
@@ -96,6 +99,9 @@ variable "functions" {
     sqs_listeners = "The names of the SQS queues to bind to the function (ex: ['mysuper-function-name'])"
     cron = "The cron expression to trigger the function (ex: 0 23 * * ? *)"
     log_retention = "The number of days to retain logs for"
+    environment = "The environment variables to set for the function"
+    assume_roles = "The roles to assume for the function"
+    policies = "The policies to attach to the function"
   }
     EOT
 }
