@@ -9,6 +9,9 @@ output "execution_arn" {
 }
 
 output "authorizers" {
-  value       = { for authorizer in aws_apigatewayv2_authorizer.apga : authorizer.name => authorizer.id }
+  value = {
+    for authorizer in aws_apigatewayv2_authorizer.apga : authorizer.name =>
+    { id : authorizer.id, authorization_type : authorizer.authorizer_type == "JWT" ? "JWT" : "CUSTOM" }
+  }
   description = "The authorizers name bind to their ids"
 }

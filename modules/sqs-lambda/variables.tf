@@ -28,6 +28,7 @@ variable "function" {
     environment   = optional(map(string), {})
     policies      = optional(map(string), {})
     assume_roles  = optional(list(string), [])
+    override_env  = optional(bool, false)
   })
   description = <<EOT
   function = {
@@ -45,6 +46,7 @@ variable "function" {
     http_path = "The HTTP path to bind to the function (ex: /hello)"
     http_method = "The HTTP method to bind to the function (ex: GET)"
     authorizer_name = "The name of the authorizer"
+    override_env = "Read .env file and add values to environment"
   }
     EOT
 }

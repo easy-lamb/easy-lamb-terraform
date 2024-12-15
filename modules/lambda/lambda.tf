@@ -14,10 +14,10 @@ resource "aws_lambda_function" "lambda" {
   source_code_hash = filebase64sha256(data.archive_file.lambda_zip.output_path)
   runtime          = var.function.runtime
   environment {
-    variables = merge({
+    variables = merge(var.function.override_env ? {
       for line in split("\n", data.local_file.env_file.content) :
       split("=", line)[0] => split("=", line)[1] if length(line) > 0 && !startswith(line, "#")
-      },
+      } : {},
     var.function.environment)
   }
 }

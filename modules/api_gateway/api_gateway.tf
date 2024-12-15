@@ -10,15 +10,21 @@ resource "aws_apigatewayv2_api" "apg" {
 }
 
 resource "aws_apigatewayv2_authorizer" "apga" {
-  for_each         = { for authorizer in var.api_gateway.authorizer : authorizer.name => authorizer }
-  api_id           = aws_apigatewayv2_api.apg.id
-  authorizer_type  = "JWT"
-  identity_sources = each.value.identity_sources
-  name             = "${local.resources_name}-${each.value.name}-authorizer"
+  for_each                          = { for authorizer in var.api_gateway.authorizer : authorizer.name => authorizer }
+  api_id                            = aws_apigatewayv2_api.apg.id
+  authorizer_type                   = each.value.audience != null && each.value.issuer != null ? "JWT" : "REQUEST"
+  authorizer_uri                    = each.value.authorizer_uri
+  identity_sources                  = each.value.identity_sources
+  authorizer_payload_format_version = each.value.authorizer_uri != null ? "2.0" : null
+  enable_simple_responses           = each.value.authorizer_uri != null ? true : null
+  name                              = each.value.name
 
-  jwt_configuration {
-    audience = each.value.audience
-    issuer   = each.value.issuer
+  dynamic "jwt_configuration" {
+    for_each = each.value.audience != null && each.value.issuer != null ? [each.value] : []
+    content {
+      audience = each.value.audience
+      issuer   = each.value.issuer
+    }
   }
 }
 

@@ -16,7 +16,7 @@ variable "environment" {
 
 variable "api_gateway" {
   type = object({
-    authorizers   = optional(map(string), {})
+    authorizers   = optional(map(object({ id = string, authorization_type = string })), {})
     id            = string
     execution_arn = string
   })
@@ -24,7 +24,7 @@ variable "api_gateway" {
         api_gateway = {
             authorizers = "The authorizers name bind to their ids"
             id = "The id of the api gateway"
-            execution_arn = "The execution arn of the api gateway"  
+            execution_arn = "The execution arn of the api gateway"
         }
             EOT
 }
@@ -46,6 +46,7 @@ variable "function" {
     http_path     = string
     http_method   = string
     authorizer    = optional(string)
+    override_env  = optional(bool, false)
   })
   description = <<EOT
   function = {
@@ -63,6 +64,7 @@ variable "function" {
     http_path = "The HTTP path to bind to the function (ex: /hello)"
     http_method = "The HTTP method to bind to the function (ex: GET)"
     authorizer = "The name of the authorizer"
+    override_env = "Read .env file and add values to environment"
   }
     EOT
 }

@@ -45,6 +45,7 @@ module "lambda" {
     log_retention = var.function.log_retention
     environment   = var.function.environment
     assume_roles  = var.function.assume_roles
+    override_env  = var.function.override_env
     policies      = local.policies
   }
 }

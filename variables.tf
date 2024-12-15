@@ -32,8 +32,10 @@ variable "api_gateway" {
     })
     authorizer = optional(list(object({
       name             = string
-      audience         = list(string)
-      issuer           = string
+      audience         = optional(list(string))
+      issuer           = optional(string)
+      authorizer_type  = optional(string, "JWT")
+      function_name    = optional(string)
       identity_sources = list(string)
     })), [])
     log_retention = optional(number, 14)
@@ -48,7 +50,7 @@ variable "api_gateway" {
         authorizer = {
           name = "The name of the authorizer"
           audience = "The audience for the authorizer"
-          issuer = "The issuer for the authorizer"  
+          issuer = "The issuer for the authorizer"
           identity_sources = "The identity sources for the authorizer"
         }
         log_retention = "The number of days to retain logs for"
@@ -79,6 +81,7 @@ variable "functions" {
     log_retention = optional(number, 3)
     assume_roles  = optional(list(string), [])
     policies      = optional(map(string), {})
+    override_env  = optional(bool, false)
   }))
   description = <<EOT
   functions = {
@@ -102,6 +105,7 @@ variable "functions" {
     environment = "The environment variables to set for the function"
     assume_roles = "The roles to assume for the function"
     policies = "The policies to attach to the function"
+    override_env = "Read .env file and add values to environment"
   }
     EOT
 }

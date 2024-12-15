@@ -29,6 +29,7 @@ variable "function" {
     policies      = optional(map(string), {})
     assume_roles  = optional(list(string), [])
     mqtt_sql      = string
+    override_env  = optional(bool, false)
   })
   description = <<EOT
   function = {
@@ -44,6 +45,7 @@ variable "function" {
     policies = "The policies to attach to the function"
     assume_roles = "The roles to assume for the function"
     mqtt_sql = "The MQTT SQL to trigger the lambda function"
+    override_env = "Read .env file and add values to environment"
   }
     EOT
 }

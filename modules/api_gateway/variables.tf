@@ -21,8 +21,10 @@ variable "api_gateway" {
     })
     authorizer = optional(list(object({
       name             = string
-      audience         = list(string)
-      issuer           = string
+      audience         = optional(list(string))
+      issuer           = optional(string)
+      authorizer_type  = optional(string, "JWT")
+      authorizer_uri   = optional(string)
       identity_sources = list(string)
     })), [])
     log_retention = optional(number, 14)
@@ -37,7 +39,7 @@ variable "api_gateway" {
         authorizer = {
           name = "The name of the authorizer"
           audience = "The audience for the authorizer"
-          issuer = "The issuer for the authorizer"  
+          issuer = "The issuer for the authorizer"
           identity_sources = "The identity sources for the authorizer"
         }
         log_retention = "The number of days to retain logs for"

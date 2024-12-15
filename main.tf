@@ -19,7 +19,17 @@ module "api_gateway" {
 
   project_name = var.project_name
   environment  = var.environment
-  api_gateway  = var.api_gateway
+  api_gateway = {
+    cors = var.api_gateway.cors
+    authorizer = [for authorizer in var.api_gateway.authorizer : {
+      name             = authorizer.name
+      authorizer_uri   = module.lambda[authorizer.function_name].function_invoke_arn
+      identity_sources = authorizer.identity_sources
+      audience         = authorizer.audience
+      issuer           = authorizer.issuer
+    }]
+    log_retention = var.api_gateway.log_retention
+  }
 }
 
 module "lambda" {
@@ -45,6 +55,7 @@ module "lambda" {
     })
     policies     = each.value.policies
     assume_roles = each.value.assume_roles
+    override_env = each.value.override_env
   }
 }
 
@@ -72,6 +83,7 @@ module "cron" {
     policies     = each.value.policies
     assume_roles = each.value.assume_roles
     cron         = each.value.cron
+    override_env = each.value.override_env
   }
 }
 
@@ -82,7 +94,7 @@ module "http" {
 
   api_gateway = {
     id            = module.api_gateway[0].id
-    authorizer    = module.api_gateway[0].authorizers
+    authorizers   = module.api_gateway[0].authorizers
     execution_arn = module.api_gateway[0].execution_arn
   }
 
@@ -101,11 +113,12 @@ module "http" {
     environment = merge(each.value.environment, {
       for listener in each.value.sqs_listeners : "SQS_QUEUE_URL_${listener}" => module.sqs[listener]
     })
-    policies        = each.value.policies
-    assume_roles    = each.value.assume_roles
-    http_path       = each.value.http_path
-    http_method     = each.value.http_method
-    authorizer_name = each.value.authorizer
+    policies     = each.value.policies
+    assume_roles = each.value.assume_roles
+    http_path    = each.value.http_path
+    http_method  = each.value.http_method
+    authorizer   = each.value.authorizer
+    override_env = each.value.override_env
   }
 }
 
@@ -134,6 +147,7 @@ module "iot" {
     assume_roles = each.value.assume_roles
     mqtt         = each.value.mqtt
     mqtt_sql     = each.value.mqtt_sql
+    override_env = each.value.override_env
   }
 }
 
@@ -158,5 +172,6 @@ module "sqs" {
     environment   = each.value.environment
     policies      = each.value.policies
     assume_roles  = each.value.assume_roles
+    override_env  = each.value.override_env
   }
 }

@@ -9,8 +9,8 @@ resource "aws_apigatewayv2_integration" "lambda_integration" {
 resource "aws_apigatewayv2_route" "default_route" {
   api_id             = var.api_gateway.id
   route_key          = "${var.function.http_method} ${var.function.http_path}"
-  authorizer_id      = var.function.authorizer != null ? var.api_gateway.authorizers[var.function.authorizer] : ""
-  authorization_type = var.function.authorizer != null ? "JWT" : null
+  authorizer_id      = var.function.authorizer != null ? var.api_gateway.authorizers[var.function.authorizer].id : ""
+  authorization_type = var.function.authorizer != null ? var.api_gateway.authorizers[var.function.authorizer].authorization_type : null
   target             = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
 
