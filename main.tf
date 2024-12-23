@@ -23,7 +23,7 @@ module "api_gateway" {
     cors = var.api_gateway.cors
     authorizer = [for authorizer in var.api_gateway.authorizer : {
       name             = authorizer.name
-      authorizer_uri   = module.lambda[authorizer.function_name].function_invoke_arn
+      authorizer_uri   = authorizer.function_name != null ? module.lambda[authorizer.function_name].function_invoke_arn : null
       identity_sources = authorizer.identity_sources
       audience         = authorizer.audience
       issuer           = authorizer.issuer
@@ -51,7 +51,7 @@ module "lambda" {
     tracing       = each.value.tracing
     log_retention = each.value.log_retention
     environment = merge(each.value.environment, {
-      for listener in each.value.sqs_listeners : "SQS_QUEUE_URL_${listener}" => module.sqs[listener]
+      for listener in each.value.sqs_listeners : upper(replace("SQS_QUEUE_URL_${listener}", "-", "_")) => module.sqs[listener].sqs_queue_url
     })
     policies     = each.value.policies
     assume_roles = each.value.assume_roles
@@ -78,7 +78,7 @@ module "cron" {
     tracing       = each.value.tracing
     log_retention = each.value.log_retention
     environment = merge(each.value.environment, {
-      for listener in each.value.sqs_listeners : "SQS_QUEUE_URL_${listener}" => module.sqs[listener]
+      for listener in each.value.sqs_listeners : upper(replace("SQS_QUEUE_URL_${listener}", "-", "_")) => module.sqs[listener].sqs_queue_url
     })
     policies     = each.value.policies
     assume_roles = each.value.assume_roles
@@ -111,7 +111,7 @@ module "http" {
     tracing       = each.value.tracing
     log_retention = each.value.log_retention
     environment = merge(each.value.environment, {
-      for listener in each.value.sqs_listeners : "SQS_QUEUE_URL_${listener}" => module.sqs[listener]
+      for listener in each.value.sqs_listeners : upper(replace("SQS_QUEUE_URL_${listener}", "-", "_")) => module.sqs[listener].sqs_queue_url
     })
     policies     = each.value.policies
     assume_roles = each.value.assume_roles
@@ -141,7 +141,7 @@ module "iot" {
     tracing       = each.value.tracing
     log_retention = each.value.log_retention
     environment = merge(each.value.environment, {
-      for listener in each.value.sqs_listeners : "SQS_QUEUE_URL_${listener}" => module.sqs[listener]
+      for listener in each.value.sqs_listeners : upper(replace("SQS_QUEUE_URL_${listener}", "-", "_")) => module.sqs[listener].sqs_queue_url
     })
     policies     = each.value.policies
     assume_roles = each.value.assume_roles
