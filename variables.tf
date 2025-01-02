@@ -72,7 +72,7 @@ variable "functions" {
     http_path     = optional(string)
     authorizer    = optional(string)
     mqtt          = optional(bool, false)
-    mqttSql       = optional(string)
+    mqtt_sql      = optional(string)
     sqs           = optional(bool, false)
     cron          = optional(string)
     description   = optional(string)
@@ -96,7 +96,7 @@ variable "functions" {
     http_method = "The HTTP method to bind to the function (ex: GET)"
     http_path = "The HTTP path to bind to the function (ex: /hello)"
     authorizer = "The name of the authorizer to use for the function"
-    mqtt = "Whether the function is an MQTT function, if true bind to an MQTT topic with values from mqttSql"
+    mqtt = "Whether the function is an MQTT function, if true bind to an MQTT topic with values from mqtt_sql"
     mqtt_sql = "The MQTT SQL to bind to the function (ex: SELECT * FROM 'topic')"
     sqs = "Whether the function is an SQS function, if true bind to an SQS queue
     sqs_listeners = "The names of the SQS queues to bind to the function (ex: ['mysuper-function-name'])"
