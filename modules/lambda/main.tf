@@ -4,6 +4,10 @@ locals {
     var.function.assume_roles,
     ["lambda.amazonaws.com"]
   )
+
+  layers = concat(var.function.layers, var.function.tracing ? [
+    local.lambda_insights_layers[var.function.architectures[0]][data.aws_region.current.name]
+  ] : [])
 }
 
 terraform {

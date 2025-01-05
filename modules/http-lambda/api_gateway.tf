@@ -14,6 +14,16 @@ resource "aws_apigatewayv2_route" "default_route" {
   target             = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
 
+resource "aws_apigatewayv2_route" "extra_routes" {
+  for_each = { for route in var.function.extra_routes : "${route.method} ${route.path}" => route }
+
+  api_id             = var.api_gateway.id
+  route_key          = each.value.method != null ? "${each.value.method} ${each.value.path}" : "$default"
+  authorizer_id      = each.value.authorizer != null ? var.api_gateway.authorizers[each.value.authorizer].id : ""
+  authorization_type = each.value.authorizer != null ? var.api_gateway.authorizers[each.value.authorizer].authorization_type : null
+  target             = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
 resource "aws_lambda_permission" "api_gateway" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"

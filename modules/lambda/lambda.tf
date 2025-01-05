@@ -6,11 +6,11 @@ resource "aws_lambda_function" "lambda" {
   handler       = var.function.handler
   memory_size   = var.function.memory
   timeout       = var.function.timeout
+  architectures = var.function.architectures
   tracing_config {
     mode = var.function.tracing ? "Active" : "PassThrough"
   }
-  layers = var.function.tracing ? ["arn:aws:lambda:eu-west-1:580247275435:layer:LambdaInsightsExtension:53"] : []
-  # TODO - make this region agnostic
+  layers           = local.layers
   source_code_hash = filebase64sha256(data.archive_file.lambda_zip.output_path)
   runtime          = var.function.runtime
   environment {

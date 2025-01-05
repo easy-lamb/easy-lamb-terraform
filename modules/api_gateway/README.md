@@ -57,6 +57,8 @@ This documentation is generated using terraform-docs. Please do not edit it manu
 
 | Name | Description |
 |------|-------------|
+| <a name="output_api_gateway"></a> [api\_gateway](#output\_api\_gateway) | The api gateway |
+| <a name="output_api_gateway_stage"></a> [api\_gateway\_stage](#output\_api\_gateway\_stage) | The api gateway stage |
 | <a name="output_authorizers"></a> [authorizers](#output\_authorizers) | The authorizers name bind to their ids |
 | <a name="output_execution_arn"></a> [execution\_arn](#output\_execution\_arn) | The execution arn of the api gateway |
 | <a name="output_id"></a> [id](#output\_id) | The id of the api gateway |

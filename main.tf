@@ -53,9 +53,11 @@ module "lambda" {
     environment = merge(each.value.environment, {
       for listener in each.value.sqs_listeners : upper(replace("SQS_QUEUE_URL_${listener}", "-", "_")) => module.sqs[listener].sqs_queue_url
     })
-    policies     = each.value.policies
-    assume_roles = each.value.assume_roles
-    override_env = each.value.override_env
+    policies      = each.value.policies
+    assume_roles  = each.value.assume_roles
+    override_env  = each.value.override_env
+    layers        = each.value.layers
+    architectures = each.value.architectures
   }
 }
 
@@ -80,10 +82,12 @@ module "cron" {
     environment = merge(each.value.environment, {
       for listener in each.value.sqs_listeners : upper(replace("SQS_QUEUE_URL_${listener}", "-", "_")) => module.sqs[listener].sqs_queue_url
     })
-    policies     = each.value.policies
-    assume_roles = each.value.assume_roles
-    cron         = each.value.cron
-    override_env = each.value.override_env
+    policies      = each.value.policies
+    assume_roles  = each.value.assume_roles
+    cron          = each.value.cron
+    override_env  = each.value.override_env
+    layers        = each.value.layers
+    architectures = each.value.architectures
   }
 }
 
@@ -113,12 +117,15 @@ module "http" {
     environment = merge(each.value.environment, {
       for listener in each.value.sqs_listeners : upper(replace("SQS_QUEUE_URL_${listener}", "-", "_")) => module.sqs[listener].sqs_queue_url
     })
-    policies     = each.value.policies
-    assume_roles = each.value.assume_roles
-    http_path    = each.value.http_path
-    http_method  = each.value.http_method
-    authorizer   = each.value.authorizer
-    override_env = each.value.override_env
+    policies      = each.value.policies
+    assume_roles  = each.value.assume_roles
+    http_path     = each.value.http_path
+    http_method   = each.value.http_method
+    authorizer    = each.value.authorizer
+    override_env  = each.value.override_env
+    layers        = each.value.layers
+    extra_routes  = each.value.extra_routes
+    architectures = each.value.architectures
   }
 }
 
@@ -143,11 +150,13 @@ module "iot" {
     environment = merge(each.value.environment, {
       for listener in each.value.sqs_listeners : upper(replace("SQS_QUEUE_URL_${listener}", "-", "_")) => module.sqs[listener].sqs_queue_url
     })
-    policies     = each.value.policies
-    assume_roles = each.value.assume_roles
-    mqtt         = each.value.mqtt
-    mqtt_sql     = each.value.mqtt_sql
-    override_env = each.value.override_env
+    policies      = each.value.policies
+    assume_roles  = each.value.assume_roles
+    mqtt          = each.value.mqtt
+    mqtt_sql      = each.value.mqtt_sql
+    override_env  = each.value.override_env
+    layers        = each.value.layers
+    architectures = each.value.architectures
   }
 }
 
@@ -173,5 +182,7 @@ module "sqs" {
     policies      = each.value.policies
     assume_roles  = each.value.assume_roles
     override_env  = each.value.override_env
+    layers        = each.value.layers
+    architectures = each.value.architectures
   }
 }

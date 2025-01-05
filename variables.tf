@@ -82,6 +82,13 @@ variable "functions" {
     assume_roles  = optional(list(string), [])
     policies      = optional(map(string), {})
     override_env  = optional(bool, false)
+    layers        = optional(list(string), [])
+    extra_routes = optional(list(object({
+      path       = string
+      method     = string
+      authorizer = optional(string)
+    })), [])
+    architectures = optional(list(string), ["x86_64"])
   }))
   description = <<EOT
   functions = {
@@ -106,6 +113,9 @@ variable "functions" {
     assume_roles = "The roles to assume for the function"
     policies = "The policies to attach to the function"
     override_env = "Read .env file and add values to environment"
+    layers = "The layers to attach to the function"
+    extra_routes = "Extra routes to bind to the function only if http is true"
+    architectures = "The architectures to build the function for"
   }
     EOT
 }

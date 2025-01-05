@@ -29,6 +29,8 @@ variable "function" {
     policies      = optional(map(string), {})
     assume_roles  = optional(list(string), [])
     override_env  = optional(bool, false)
+    layers        = optional(list(string), [])
+    architectures = optional(list(string), ["x86_64"])
   })
   description = <<EOT
   function = {
@@ -47,6 +49,8 @@ variable "function" {
     http_method = "The HTTP method to bind to the function (ex: GET)"
     authorizer_name = "The name of the authorizer"
     override_env = "Read .env file and add values to environment"
+    layers = "The layers to attach to the function"
+    architectures = "The architectures to build the function for"
   }
     EOT
 }

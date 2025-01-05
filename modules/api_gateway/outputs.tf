@@ -15,3 +15,13 @@ output "authorizers" {
   }
   description = "The authorizers name bind to their ids"
 }
+
+output "api_gateway" {
+  value       = aws_apigatewayv2_api.apg
+  description = "The api gateway"
+}
+
+output "api_gateway_stage" {
+  value       = aws_apigatewayv2_stage.default_stage
+  description = "The api gateway stage"
+}

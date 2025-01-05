@@ -46,5 +46,7 @@ module "lambda" {
     assume_roles  = var.function.assume_roles
     override_env  = var.function.override_env
     policies      = local.policies
+    layers        = var.function.layers
+    architectures = var.function.architectures
   }
 }

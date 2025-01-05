@@ -30,6 +30,8 @@ variable "function" {
     assume_roles  = optional(list(string), [])
     cron          = string
     override_env  = optional(bool, false)
+    layers        = optional(list(string), [])
+    architectures = optional(list(string), ["x86_64"])
   })
   description = <<EOT
   function = {
@@ -46,6 +48,8 @@ variable "function" {
     assume_roles = "The roles to assume for the function"
     cron = "The cron expression to trigger the lambda function"
     override_env = "Read .env file and add values to environment"
+    layers = "The layers to attach to the function"
+    architectures = "The architectures to build the function for"
   }
     EOT
 }

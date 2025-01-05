@@ -47,6 +47,13 @@ variable "function" {
     http_method   = string
     authorizer    = optional(string)
     override_env  = optional(bool, false)
+    layers        = optional(list(string), [])
+    extra_routes = optional(list(object({
+      path       = string
+      method     = string
+      authorizer = optional(string)
+    })), [])
+    architectures = optional(list(string), ["x86_64"])
   })
   description = <<EOT
   function = {
@@ -65,6 +72,9 @@ variable "function" {
     http_method = "The HTTP method to bind to the function (ex: GET)"
     authorizer = "The name of the authorizer"
     override_env = "Read .env file and add values to environment"
+    layers = "The layers to attach to the function"
+    extra_routes = "Extra routes to add to the function"
+    architectures = "The architectures to build the function for"
   }
     EOT
 }

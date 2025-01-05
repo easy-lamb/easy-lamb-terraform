@@ -28,7 +28,9 @@ variable "function" {
     environment   = optional(map(string), {})
     policies      = optional(map(string), {})
     assume_roles  = optional(list(string), [])
-    override_env  = optional(bool, false)
+    override_env  = optional(bool, false),
+    layers        = optional(list(string), [])
+    architectures = optional(list(string), ["x86_64"])
   })
   description = <<EOT
   function = {
@@ -44,6 +46,8 @@ variable "function" {
     policies = "The policies to attach to the function"
     assume_roles = "The roles to assume for the function"
     override_env = "Read .env file and add values to environment"
+    layers = "The layers to attach to the function"
+    architectures = "The architectures to build the function for"
   }
     EOT
 }
