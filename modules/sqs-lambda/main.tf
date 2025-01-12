@@ -3,7 +3,7 @@ locals {
 
   policies = merge(var.function.policies,
     {
-      "lambda_iot_policy" : jsonencode({
+      "lambda_sqs_policy" : jsonencode({
         Version = "2012-10-17"
         Statement = [
           {
